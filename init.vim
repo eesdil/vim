@@ -191,6 +191,8 @@ Plug 'tomtom/tcomment_vim'
 Plug 'Shougo/deoplete.nvim'
 Plug 'mhartington/nvim-typescript'
 Plug 'HerringtonDarkholme/yats.vim'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'reedes/vim-colors-pencil'
 " Plug 'altercation/vim-colors-solarized'
 
 call plug#end()
@@ -272,7 +274,7 @@ call tcomment#DefineType('sqlserver', '-- %s')
 " {{{ terminal
 :tnoremap <Esc> <C-\><C-n>
 " }}}
-"Clear current search highlight by double tapping //
+" Clear current search highlight by double tapping //
 nmap <silent> // :nohlsearch<CR>
 
 " {{{
@@ -296,3 +298,14 @@ command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 nmap <leader>w :StripTrailingWhitespaces<CR>
 
 let vim_markdown_preview_github=1
+
+" Ctrl P {{{
+let g:ctrlp_cmd = 'CtrlPMRU'
+
+" }}}
+" Open in browser {{{
+nnoremap <leader>of :exe ':silent !open -a /Applications/Firefox.app %'<CR>
+nnoremap <leader>oc :exe ':silent !open -a /Applications/Google\ Chrome.app %'<CR>
+nnoremap <leader>og :exe ':silent !open -a /Applications/Google\ Chrome.app %'<CR>
+nnoremap <leader>os :exe ':silent !open /Applications/Safari.app %'<CR>
+" }}}
