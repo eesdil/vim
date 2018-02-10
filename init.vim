@@ -72,7 +72,7 @@ set foldnestmax=15
 set foldenable
 set foldminlines=2
 "set foldlevel=20
-set foldlevelstart=2
+set foldlevelstart=4
 
 " save view after leaving window and restore it
 " if Neovim()
@@ -142,9 +142,6 @@ vnoremap <C-h> ""y:%s/<C-R>=escape(@", '/\')<CR>//g<Left><Left>
 set termguicolors
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
-" set background=dark
-set background=light
-
 " set lines=50
 " set columns=120
 
@@ -167,8 +164,11 @@ set guioptions-=r
 set guioptions-=L
 
 " }}}
-"
-call plug#begin('~/.config/nvim/plugged')
+if WINDOWS()
+    call plug#begin('~\AppData\Local\nvim\plugged')
+else
+    call plug#begin('~/.config/nvim/plugged')
+endif
 
 Plug 'scrooloose/vim-slumlord'
 Plug 'aklt/plantuml-syntax'
@@ -188,16 +188,28 @@ Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tomtom/tcomment_vim'
-Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim',{'commit':'1e19944cda8b460dc59ff61a591e8a71fee366d5'}
 Plug 'mhartington/nvim-typescript'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'reedes/vim-colors-pencil'
+Plug 'mhinz/vim-startify'
 " Plug 'altercation/vim-colors-solarized'
+Plug 'easymotion/vim-easymotion'
+Plug 'tpope/vim-surround'
+" Plug 'airblade/vim-gitgutter'
+Plug 'w0rp/ale'
+Plug 'rakr/vim-one'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'Chiel92/vim-autoformat'
 
 call plug#end()
 
-colorscheme NeoSolarized
+" colorscheme PaperColor
+colorscheme one
+set background=dark
+" set background=light
+
 
 " NERDTree {{{
 
@@ -271,6 +283,15 @@ call tcomment#DefineType('typescript', '// %s')
 call tcomment#DefineType('sqlserver', '-- %s')
 " }}}
 
+" EasyMotion {{{
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+
+let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
+" }}}
+
 " {{{ terminal
 :tnoremap <Esc> <C-\><C-n>
 " }}}
@@ -298,6 +319,10 @@ command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
 nmap <leader>w :StripTrailingWhitespaces<CR>
 
 let vim_markdown_preview_github=1
+" ale {{{
+let g:ale_sign_column_always = 1
+" let g:ale_completion_enabled = 1
+"{{{
 
 " Ctrl P {{{
 let g:ctrlp_cmd = 'CtrlPMRU'
@@ -308,4 +333,7 @@ nnoremap <leader>of :exe ':silent !open -a /Applications/Firefox.app %'<CR>
 nnoremap <leader>oc :exe ':silent !open -a /Applications/Google\ Chrome.app %'<CR>
 nnoremap <leader>og :exe ':silent !open -a /Applications/Google\ Chrome.app %'<CR>
 nnoremap <leader>os :exe ':silent !open /Applications/Safari.app %'<CR>
+" }}}
+" Autoformat {{{
+noremap <leader>f :Autoformat<CR>
 " }}}
