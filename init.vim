@@ -181,6 +181,8 @@ else
     call plug#begin('~/.config/nvim/plugged')
 endif
 
+Plug 'andymass/vim-matchup'
+Plug 'ryanoasis/vim-devicons'
 Plug 'jreybert/vimagit'
 Plug 'ruanyl/coverage.vim'
 Plug 'vim-airline/vim-airline'
