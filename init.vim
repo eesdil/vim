@@ -1,22 +1,22 @@
 " vim:fdm=marker
 " Identify platform {{{
 silent function! OSX()
-    return has('macunix')
+return has('macunix')
 endfunction
 silent function! LINUX()
-    return has('unix') && !has('macunix') && !has('win32unix')
+return has('unix') && !has('macunix') && !has('win32unix')
 endfunction
 silent function! WINDOWS()
-    return  (has('win16') || has('win32') || has('win64'))
+return  (has('win16') || has('win32') || has('win64'))
 endfunction
 
 silent function! Neovim()
-    return has('nvim')
+return has('nvim')
 endfunction
 " }}}
 " Basic {{{
 
-language en_US
+language en_US.utf8
 set number                      "Line numbers are good
 " set relativenumber              "relative numbering
 set backspace=indent,eol,start  "Allow backspace in insert mode
@@ -75,9 +75,9 @@ set foldlevelstart=4
 
 " save view after leaving window and restore it
 " if Neovim()
-    "set viewdir=$HOME/.nvim/views//
+"set viewdir=$HOME/.nvim/views//
 "else
-    "set viewdir=$HOME/.vim/views//
+"set viewdir=$HOME/.vim/views//
 "endif
 " autocmd BufWinLeave *.* mkview
 " autocmd BufWinEnter *.* silent loadview
@@ -181,6 +181,8 @@ else
     call plug#begin('~/.config/nvim/plugged')
 endif
 
+Plug 'junegunn/fzf', { 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
 Plug 'andymass/vim-matchup'
 Plug 'ryanoasis/vim-devicons'
 Plug 'jreybert/vimagit'
@@ -190,7 +192,7 @@ Plug 'tomtom/tcomment_vim'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
-Plug 'Shougo/denite.nvim'
+" Plug 'Shougo/denite.nvim'
 Plug 'Shougo/neomru.vim'
 Plug 'Shougo/deoplete.nvim'
 Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
@@ -214,7 +216,7 @@ Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'mhinz/vim-startify'
 Plug 'Yggdroot/LeaderF'
-Plug 'chemzqm/denite-git'
+" Plug 'chemzqm/denite-git'
 " Plug 'ctrlpvim/ctrlp.vim'
 " Plug 'mhinz/vim-signify'
 " Plug 'scrooloose/vim-slumlord'
@@ -241,7 +243,7 @@ Plug 'wimstefan/vim-artesanal'
 call plug#end()
 " }}}
 
-colorscheme light
+colorscheme one
 " let g:one_allow_italics = 1
 " let g:airline_theme='one'
 let vim_markdown_preview_github=1
@@ -250,6 +252,14 @@ let g:coverage_json_report_path = 'coverage/coverage.json'
 let g:coverage_sign_covered = '⦿'
 let g:coverage_interval = 5000
 
+" fzf {{{
+if has("nvim")
+  tnoremap <Esc> <c-\><c-n>
+endif
+autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
+nmap <C-p> :GFiles<CR>
+" nmap <C-P> :Commands<CR>
+" }}}
 " Rooter {{{
 " let g:rooter_patterns = ['.git/']
 let g:rooter_patterns = ['package.json']
@@ -349,22 +359,22 @@ xmap <C-k>     <Plug>(neosnippet_expand_target)
 " let g:Lf_WorkingDirectory = finddir('.git', '.;')
 " }}}
 " Denite {{{
-call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
-call denite#custom#map('insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
-call denite#custom#map('insert', '<C-s>', '<denite:do_action:vsplit>', 'noremap')
-
-" denite file search (c-p uses gitignore, c-o looks at everything)
-map <C-P> :DeniteProjectDir -buffer-name=git buffer file_mru file_rec/git<CR>
-map <C-A> :DeniteProjectDir -buffer-name=files file_rec<CR>
-
-" -u flag to unrestrict (see ag docs)
-call denite#custom#var('file_rec', 'command',
-    \ ['ag', '--follow', '--nocolor', '--nogroup', '-u', '-g', ''])
-
-call denite#custom#alias('source', 'file_rec/git', 'file_rec')
-call denite#custom#var('file_rec/git', 'command',
-    \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-
+" call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
+" call denite#custom#map('insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
+" call denite#custom#map('insert', '<C-s>', '<denite:do_action:vsplit>', 'noremap')
+"
+" " denite file search (c-p uses gitignore, c-o looks at everything)
+" map <C-P> :DeniteProjectDir -buffer-name=git buffer file_mru file_rec/git<CR>
+" map <C-A> :DeniteProjectDir -buffer-name=files file_rec<CR>
+"
+" " -u flag to unrestrict (see ag docs)
+" call denite#custom#var('file_rec', 'command',
+"     \ ['ag', '--follow', '--nocolor', '--nogroup', '-u', '-g', ''])
+"
+" call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+" call denite#custom#var('file_rec/git', 'command',
+"     \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+"
 " }}}
 " Denite git {{{
 " nnoremap <silent> <leader>gs :Denite gitstatus<CR>
@@ -373,11 +383,11 @@ call denite#custom#var('file_rec/git', 'command',
 " Ale {{{
 let g:ale_sign_column_always = 1
 let g:ale_fixers = {
-\   'javascript': ['prettier'],
-\   'typescript': ['prettier'],
-\   'html': ['prettier'],
-\   'css': ['prettier'],
-\}
+            \   'javascript': ['prettier'],
+            \   'typescript': ['prettier'],
+            \   'html': ['prettier'],
+            \   'css': ['prettier'],
+            \}
 let g:ale_sign_error = '•'
 let g:ale_sign_warning = '•'
 let g:airline#extensions#ale#error_symbol='• '
@@ -400,8 +410,8 @@ noremap <leader>f :Autoformat<CR>
 " }}}
 " The Silver Searcher {{{
 if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
+    " Use ag over grep
+    set grepprg=ag\ --nogroup\ --nocolor
 endif
 
 command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
@@ -418,12 +428,12 @@ let g:indent_guides_color_change_percent = 2
 " }}}
 " custom functions {{{
 function! <SID>TestJasmine()
-  let b:filename = expand('%:f')
-  let b:filepath = 'dist/'.expand('%:r').'.js'
-  if b:filename !~ '\.spec'
-      let b:filepath = 'dist/'.expand('%:r').'.spec.js'
-  endif
-  execute '!npx jasmine --config='.getcwd().'/jasmine.json --fail-fast=true '.b:filepath
+    let b:filename = expand('%:f')
+    let b:filepath = 'dist/'.expand('%:r').'.js'
+    if b:filename !~ '\.spec'
+        let b:filepath = 'dist/'.expand('%:r').'.spec.js'
+    endif
+    execute '!npx jasmine --config='.getcwd().'/jasmine.json --fail-fast=true '.b:filepath
 endfunction
 command! TestJasmine call <SID>TestJasmine()
 nmap <leader>t :TestJasmine<CR>
